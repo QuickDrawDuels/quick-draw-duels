@@ -1,45 +1,33 @@
-const canvas = document.getElementById("drawingCanvas");
-const ctx = canvas.getContext("2d");
-let drawing = false;
-let currentColor = "black";
+const canvas = document.getElementById('drawingBoard');
+const ctx = canvas.getContext('2d');
 
-// Get correct mouse position relative to canvas
-function getMousePos(event) {
-    const rect = canvas.getBoundingClientRect();
-    return {
-        x: event.clientX - rect.left,
-        y: event.clientY - rect.top
-    };
-}
+// Set initial canvas size
+canvas.width = 800;
+canvas.height = 400;
+
+// Drawing settings
+let drawing = false;
+let currentColor = 'black';
 
 // Start drawing
-canvas.addEventListener("mousedown", (event) => {
-    drawing = true;
-    const pos = getMousePos(event);
-    ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-});
+canvas.addEventListener('mousedown', () => drawing = true);
+canvas.addEventListener('mouseup', () => drawing = false);
+canvas.addEventListener('mousemove', draw);
 
-// Stop drawing
-canvas.addEventListener("mouseup", () => {
-    drawing = false;
-    ctx.beginPath();
-});
-
-// Draw lines
-canvas.addEventListener("mousemove", (event) => {
+function draw(event) {
     if (!drawing) return;
-    const pos = getMousePos(event);
+
     ctx.strokeStyle = currentColor;
     ctx.lineWidth = 5;
-    ctx.lineCap = "round";
-    ctx.lineTo(pos.x, pos.y);
+    ctx.lineCap = 'round';
+
+    ctx.lineTo(event.offsetX, event.offsetY);
     ctx.stroke();
     ctx.beginPath();
-    ctx.moveTo(pos.x, pos.y);
-});
+    ctx.moveTo(event.offsetX, event.offsetY);
+}
 
-// Change color function
+// Change color
 function changeColor(color) {
     currentColor = color;
 }
