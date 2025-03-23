@@ -1,38 +1,45 @@
-const canvas = document.getElementById('drawingBoard');
-const ctx = canvas.getContext('2d');
+window.onload = function () {
+    const canvas = document.getElementById("drawingBoard");
+    if (!canvas) {
+        console.error("Canvas element not found!");
+        return;
+    }
+    const ctx = canvas.getContext("2d");
 
-// Set initial canvas size
-canvas.width = 800;
-canvas.height = 400;
+    canvas.width = 800;
+    canvas.height = 400;
 
-// Drawing settings
-let drawing = false;
-let currentColor = 'black';
+    let drawing = false;
+    let currentColor = "black";
 
-// Start drawing
-canvas.addEventListener('mousedown', () => drawing = true);
-canvas.addEventListener('mouseup', () => drawing = false);
-canvas.addEventListener('mousemove', draw);
+    canvas.addEventListener("mousedown", () => {
+        drawing = true;
+        ctx.beginPath();
+    });
 
-function draw(event) {
-    if (!drawing) return;
+    canvas.addEventListener("mouseup", () => {
+        drawing = false;
+        ctx.beginPath();
+    });
 
-    ctx.strokeStyle = currentColor;
-    ctx.lineWidth = 5;
-    ctx.lineCap = 'round';
+    canvas.addEventListener("mousemove", (event) => {
+        if (!drawing) return;
 
-    ctx.lineTo(event.offsetX, event.offsetY);
-    ctx.stroke();
-    ctx.beginPath();
-    ctx.moveTo(event.offsetX, event.offsetY);
-}
+        ctx.strokeStyle = currentColor;
+        ctx.lineWidth = 5;
+        ctx.lineCap = "round";
 
-// Change color
-function changeColor(color) {
-    currentColor = color;
-}
+        ctx.lineTo(event.offsetX, event.offsetY);
+        ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(event.offsetX, event.offsetY);
+    });
 
-// Clear canvas
-function clearCanvas() {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-}
+    window.changeColor = function (color) {
+        currentColor = color;
+    };
+
+    window.clearCanvas = function () {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+    };
+};
